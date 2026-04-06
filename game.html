@@ -28,9 +28,12 @@
     start();
   </script>
   <script>
+    let fix = false;
     navigator.serviceWorker.addEventListener("message", (event) => {
       if (event.data.type === "invalid-id") {
-        alert("Invalid Level ID");
+        if (fix) return;
+        fix = true;
+        alert("Invalid Level ID...");
         window.location.href = "https://lasokar.github.io/geometrydashdotcom/";
       }
     });
