@@ -30,9 +30,7 @@ self.addEventListener("fetch", (event) => {
   
   if (levelID >= 0) {
     if (url.pathname.includes("1.txt")) {
-      event.respondWith(
-        fetch(`https://getleveldata.lasokar.workers.dev?id=${levelID}`)
-      );
+      event.respondWith(handleLevelRequest());
       return;
     }
 
@@ -44,3 +42,19 @@ self.addEventListener("fetch", (event) => {
     }
   }
 });
+
+async function handleLevelRequest() {
+  const res = await fetch(
+    `https://getleveldata.lasokar.workers.dev?id=${levelID}`
+  );
+  const text = await res.text();
+  if (text.trim() === "-1") {
+    self.clients.matchAll().then((clients) => {
+      for (const client of clients) {
+        client.postMessage({ type: "invalid-id" });
+      }
+    });
+    return;
+  }
+  return new Response(text);
+}
