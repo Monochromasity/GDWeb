@@ -13,7 +13,7 @@
   <script>
     var levelId = Number(new URLSearchParams(location.search).get('id')) || 1;
     async function start() {
-      await navigator.serviceWorker.register('../worker.js');
+      await navigator.serviceWorker.register('https://gdweb.vercel.app/worker.js');
       await navigator.serviceWorker.ready;
 
       navigator.serviceWorker.controller?.postMessage({ levelId });
